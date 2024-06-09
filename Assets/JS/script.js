@@ -2,10 +2,25 @@
 let taskList = JSON.parse(localStorage.getItem("tasks"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
+// Get the modal
+const modal = document.getElementById("myModal");
+
+// Get the <span> element that closes the modal
+const span = document.getElementsByClassName("close")[0];
+
+const addButton = document.querySelector('.btn-success');
+
+addButton.addEventListener('click', generateTaskId);
+span.addEventListener('click', closeModal);
+
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
+    modal.style.display = "block";
+};
 
-}
+function closeModal() {
+    modal.style.display = "none";
+};
 
 // Todo: create a function to create a task card
 function createTaskCard(task) {
