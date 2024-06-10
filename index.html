@@ -25,15 +25,29 @@
       <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal">Add Task</button>
     </div>
     <!-- Todo: Create a modal with a form to add tasks -->
-    <div id="myModal" class="modal">
 
-      <!-- Modal content -->
+
+
+
+    <div id="myModal" class="modal">
       <div class="modal-content">
+        <h3>Add Task</h3>
         <span class="close">&times;</span>
-        <p>Some text in the Modal..</p>
+        <hr>
+        <form>
+          <div class="container1">
+            <input type="text" id="taskTitle" name="tastTitle">
+          </div>
+          <div class="container2">
+            <input type="text" id="dueDate" name="dueDate">
+          </div>
+        </form>
       </div>
-    
     </div>
+
+
+
+
     <div class="row swim-lanes text-center justify-content-between">
       <div class="col-12 col-lg-4 d-flex">
         <div id="to-do" class="card border-light mb-3 lane flex-grow-1">
@@ -77,6 +91,7 @@
     integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U=" crossorigin="anonymous"></script>
 
   <script src="./Assets/JS/script.js"></script>
+  <!-- <script> $( "#datepicker" ).datepicker();</script> -->
 </body>
 
 </html>

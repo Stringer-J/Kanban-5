@@ -8,8 +8,10 @@ const modal = document.getElementById("myModal");
 // Get the <span> element that closes the modal
 const span = document.getElementsByClassName("close")[0];
 
+// Gets the 'add task' button
 const addButton = document.querySelector('.btn-success');
 
+// Adds event listeners to the 'add task' button and the 'x' to close the modal
 addButton.addEventListener('click', generateTaskId);
 span.addEventListener('click', closeModal);
 
