@@ -31,17 +31,27 @@
 
     <div id="myModal" class="modal">
       <div class="modal-content">
-        <h3>Add Task</h3>
-        <span class="close">&times;</span>
-        <hr>
-        <form>
-          <div class="container1">
-            <input type="text" id="taskTitle" name="tastTitle">
+        <div class="modalHeader">
+          <h3>Add Task</h3>
+          <span class="close">&times;</span>
+        </div>
+        <div class="modalForm">
+          <form>
+            <div class="form-group">
+              <label for="titleBox">Task Title</label>
+              <input type="text" class="form-control" id="titleBox">
           </div>
-          <div class="container2">
-            <input type="text" id="dueDate" name="dueDate">
+          <div class="form-group">
+              <label for="dueDateBox">Task Due Date</label>
+              <input type="text" class="form-control" id="dueDateBox">
           </div>
-        </form>
+          <div class="form-group">
+              <label for="descriptionBox">Task Description</label>
+              <input type="text" class="form-control" id="descriptionBox">
+          </div>
+          </form>
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal">Add Task</button>
+        </div>
       </div>
     </div>
 
