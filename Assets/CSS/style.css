@@ -99,3 +99,16 @@ body {
   text-decoration: none;
   cursor: pointer;
 }
+
+.newDiv {
+  position: relative;
+  border: 2px black solid;
+  margin-bottom: 2%;
+  border-radius: 5px;
+  background-color: aliceblue;
+  z-index: 1;
+}
+
+.newDiv button {
+  margin-bottom: 2%;
+}

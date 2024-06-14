@@ -5,7 +5,9 @@ let nextId = JSON.parse(localStorage.getItem("nextId"));
 const modal = document.getElementById("myModal"); // Get the modal
 const span = document.getElementsByClassName("close")[0]; // Get the <span> element that closes the modal
 const addButton = document.querySelector('.btn-success'); // Gets the 'add task' button
-const addButton2 = document.querySelector('.btn-primary');
+const addButton2 = document.querySelector('.btn-primary'); // Gets the second 'add task' button on the modal
+
+const toDoBox = document.getElementById('todo-cards'); // Gets the box for to-do cards to go
 
 const openModal = () => {modal.style.display = 'block'};
 const closeModal = () => {
@@ -20,6 +22,7 @@ span.addEventListener('click', closeModal);
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
+    // creates class of TaskCard to be called later as necessary
     class TaskCard {
         constructor() {
             this.id = generateUniqueId();
@@ -33,63 +36,96 @@ function generateTaskId() {
         return Math.random().toString(36).substr(2, 9); // Generate a random alphanumeric ID
     }
 
-    const taskCard = new TaskCard();
+    const taskCard = new TaskCard(); // creates new instance of 'TaskCard'
 
     console.log(taskCard);
+
+    createTaskCard(taskCard);
+    closeModal(); // closes modal after form has been submitted
 };
 
-addButton2.addEventListener('click', generateTaskId);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+addButton2.addEventListener('click', generateTaskId); // adds event listener to button that captures form data on modal
 
 // Todo: create a function to create a task card
-function createTaskCard(task) {
+function createTaskCard(taskCard) {
+    if (taskCard) {
+        const title = taskCard.title;
+        const date = taskCard.date;
+        const description = taskCard.description;
+    
+        if (title && date && description) {
+            const newDiv = document.createElement('div');
+            newDiv.classList.add('newDiv');
+    
+            const title2 = document.createElement('h3');
+            title2.textContent = `${title}`;
+            newDiv.appendChild(title2);
+    
+            const line = document.createElement('hr');
+            newDiv.appendChild(line);
+    
+            const date2 = document.createElement('p');
+            date2.textContent = `${date}`;
+            newDiv.appendChild(date2);
+    
+            const description2 = document.createElement('p');
+            description2.textContent = `${description}`;
+            newDiv.appendChild(description2);
 
+            const deleteButton = document.createElement('button');
+            newDiv.classList.add('newDiv');
+            deleteButton.textContent = 'Delete';
+            newDiv.appendChild(deleteButton);
+    
+            toDoBox.appendChild(newDiv);
+
+            $(newDiv).draggable();
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
