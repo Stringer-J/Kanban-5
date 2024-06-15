@@ -1,5 +1,5 @@
 // Retrieve tasks and nextId from localStorage
-let taskList = JSON.parse(localStorage.getItem("tasks"));
+let taskList = JSON.parse(localStorage.getItem("newDivArray"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
 const modal = document.getElementById("myModal"); // Get the modal
@@ -48,6 +48,8 @@ function generateTaskId() {
 
 addButton2.addEventListener('click', generateTaskId); // adds event listener to button that captures form data on modal
 
+const newDivArray = [];
+
 // Todo: create a function to create a task card
 function createTaskCard(taskCard) {
     if (taskCard) {
@@ -78,89 +80,25 @@ function createTaskCard(taskCard) {
             newDiv.classList.add('newDiv');
             deleteButton.textContent = 'Delete';
             newDiv.appendChild(deleteButton);
-
-            const newDiv2 = document.createElement('div');
-            newDiv2.classList.add('newDiv2');
-            progressBox.appendChild(newDiv2);
-
-            const newDiv3 = document.createElement('div');
-            newDiv3.classList.add('newDiv3');
-            doneBox.appendChild(newDiv3);
     
             toDoBox.appendChild(newDiv);
 
-            $(newDiv).draggable();
+            // $(newDiv).draggable();
 
-            $("#todo-cards").droppable({
-                drop: function(event, ui) {
-                  $(this).addClass("dropped");
-                  const droppedItem = ui.draggable;
-                  droppedItem.css('background-color', 'orange');
-                  alert("Item dropped inside #todo-cards!");
-                }
-              });
-              $("#in-progress-cards").droppable({
-                drop: function(event, ui) {
-                  $(this).addClass("dropped");
-                  const droppedItem = ui.draggable;
-                  droppedItem.css('background-color', 'green');
-                  alert("Item dropped inside #in-progress-cards!");
-                }
-              });
-              $("#done-cards").droppable({
-                drop: function(event, ui) {
-                  $(this).addClass("dropped");
-                  const droppedItem = ui.draggable;
-                  droppedItem.css('background-color', 'yellow');
-                  alert("Item dropped inside #done-cards!");
-                }
-              });
+            // Save the necessary data from newDiv into an object
+            const taskData = {
+                id: taskCard.id,
+                title: title,
+                date: date,
+                description: description
+            };
+
+            newDivArray.push(taskData);
+
+            localStorage.setItem('newDivArray', JSON.stringify(newDivArray));
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
@@ -184,5 +122,28 @@ function handleDrop(event, ui) {
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
-
-});
+    $("#todo-cards").droppable({
+        drop: function(event, ui) {
+          $(this).addClass("dropped");
+          const droppedItem = ui.draggable;
+          droppedItem.css('background-color', 'orange');
+          alert("Item dropped inside #todo-cards!");
+        }
+      });
+      $("#in-progress-cards").droppable({
+        drop: function(event, ui) {
+          $(this).addClass("dropped");
+          const droppedItem = ui.draggable;
+          droppedItem.css('background-color', 'green');
+          alert("Item dropped inside #in-progress-cards!");
+        }
+      });
+      $("#done-cards").droppable({
+        drop: function(event, ui) {
+          $(this).addClass("dropped");
+          const droppedItem = ui.draggable;
+          droppedItem.css('background-color', 'yellow');
+          alert("Item dropped inside #done-cards!");
+        }
+      });
+    });
