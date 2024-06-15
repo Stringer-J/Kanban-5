@@ -8,6 +8,8 @@ const addButton = document.querySelector('.btn-success'); // Gets the 'add task'
 const addButton2 = document.querySelector('.btn-primary'); // Gets the second 'add task' button on the modal
 
 const toDoBox = document.getElementById('todo-cards'); // Gets the box for to-do cards to go
+const progressBox = document.getElementById('in-progress-cards');
+const doneBox = document.getElementById('done-cards');
 
 const openModal = () => {modal.style.display = 'block'};
 const closeModal = () => {
@@ -76,10 +78,43 @@ function createTaskCard(taskCard) {
             newDiv.classList.add('newDiv');
             deleteButton.textContent = 'Delete';
             newDiv.appendChild(deleteButton);
+
+            const newDiv2 = document.createElement('div');
+            newDiv2.classList.add('newDiv2');
+            progressBox.appendChild(newDiv2);
+
+            const newDiv3 = document.createElement('div');
+            newDiv3.classList.add('newDiv3');
+            doneBox.appendChild(newDiv3);
     
             toDoBox.appendChild(newDiv);
 
             $(newDiv).draggable();
+
+            $("#todo-cards").droppable({
+                drop: function(event, ui) {
+                  $(this).addClass("dropped");
+                  const droppedItem = ui.draggable;
+                  droppedItem.css('background-color', 'orange');
+                  alert("Item dropped inside #todo-cards!");
+                }
+              });
+              $("#in-progress-cards").droppable({
+                drop: function(event, ui) {
+                  $(this).addClass("dropped");
+                  const droppedItem = ui.draggable;
+                  droppedItem.css('background-color', 'green');
+                  alert("Item dropped inside #in-progress-cards!");
+                }
+              });
+              $("#done-cards").droppable({
+                drop: function(event, ui) {
+                  $(this).addClass("dropped");
+                  const droppedItem = ui.draggable;
+                  droppedItem.css('background-color', 'yellow');
+                  alert("Item dropped inside #done-cards!");
+                }
+              });
         }
     }
 }
