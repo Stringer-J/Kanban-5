@@ -129,19 +129,25 @@ $(document).ready(function () {
 
     let taskList = JSON.parse(localStorage.getItem("newDivArray"));
 
-    // $("#todo-cards, #in-progress-cards, #done-cards").droppable({
-    //     drop: function(event, ui) {
-    //       $(this).addClass("dropped");
-    //       const droppedItem = ui.draggable;
-    //       droppedItem.css('background-color', 'orange');
-    //     }
-    //   });
-
     $("#todo-cards, #in-progress-cards, #done-cards").droppable({
         drop: function(event, ui) {
             $(this).addClass("dropped");
             const droppedItem = ui.draggable;
-            droppedItem.css('background-color', 'orange');
+            // Remove any existing positioning style added by jQuery UI draggable
+            droppedItem.css({top: 0, left: 0, position:'relative'});
+
+            // Get the drop target
+            const dropTarget = $(this);
+            
+            // Find the last child element in the drop target
+            const lastItem = dropTarget.children('.newDiv').last();
+            
+            // Append the dropped item right after the last child
+            if (lastItem.length > 0) {
+                droppedItem.insertAfter(lastItem);
+            } else {
+                dropTarget.append(droppedItem);
+            }
     
             // Get the status based on the droppable area id
             let status;
