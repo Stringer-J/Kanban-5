@@ -1,5 +1,4 @@
 // Retrieve tasks and nextId from localStorage
-let taskList = JSON.parse(localStorage.getItem("newDivArray"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
 const modal = document.getElementById("myModal"); // Get the modal
@@ -58,6 +57,10 @@ function createTaskCard(taskCard) {
         const description = taskCard.description;
     
         if (title && date && description) {
+
+            let newDivArray = JSON.parse(localStorage.getItem("newDivArray")) || []; // Initialize or load the array
+
+
             const newDiv = document.createElement('div');
             newDiv.classList.add('newDiv');
     
@@ -122,6 +125,9 @@ function handleDrop(event, ui) {
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
+
+    let taskList = JSON.parse(localStorage.getItem("newDivArray"));
+
     $("#todo-cards").droppable({
         drop: function(event, ui) {
           $(this).addClass("dropped");
@@ -146,4 +152,35 @@ $(document).ready(function () {
           alert("Item dropped inside #done-cards!");
         }
       });
-    });
+
+    if(taskList) {
+        taskList.forEach(taskData => {
+            const newDiv = document.createElement('div');
+            newDiv.classList.add('newDiv');
+    
+            const title2 = document.createElement('h3');
+            title2.textContent = taskData.title;
+            newDiv.appendChild(title2);
+    
+            const line = document.createElement('hr');
+            newDiv.appendChild(line);
+    
+            const date2 = document.createElement('p');
+            date2.textContent = taskData.date;
+            newDiv.appendChild(date2);
+    
+            const description2 = document.createElement('p');
+            description2.textContent = taskData.description;
+            newDiv.appendChild(description2);
+
+            const deleteButton = document.createElement('button');
+            newDiv.classList.add('newDiv');
+            deleteButton.textContent = 'Delete';
+            newDiv.appendChild(deleteButton);
+    
+            toDoBox.appendChild(newDiv);
+
+            $(newDiv).draggable();
+        })
+    }
+});
