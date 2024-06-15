@@ -1,5 +1,4 @@
-// Retrieve tasks and nextId from localStorage
-let nextId = JSON.parse(localStorage.getItem("nextId"));
+let newDivArray = JSON.parse(localStorage.getItem("newDivArray")) || [];
 
 const modal = document.getElementById("myModal"); // Get the modal
 const span = document.getElementsByClassName("close")[0]; // Get the <span> element that closes the modal
@@ -47,19 +46,14 @@ function generateTaskId() {
 
 addButton2.addEventListener('click', generateTaskId); // adds event listener to button that captures form data on modal
 
-const newDivArray = [];
-
 // Todo: create a function to create a task card
 function createTaskCard(taskCard) {
     if (taskCard) {
         const title = taskCard.title;
-        const date = taskCard.date;
+        const date = dayjs(taskCard.date);
         const description = taskCard.description;
     
         if (title && date && description) {
-
-            let newDivArray = JSON.parse(localStorage.getItem("newDivArray")) || []; // Initialize or load the array
-
 
             const newDiv = document.createElement('div');
             newDiv.classList.add('newDiv');
@@ -80,9 +74,29 @@ function createTaskCard(taskCard) {
             newDiv.appendChild(description2);
 
             const deleteButton = document.createElement('button');
-            newDiv.classList.add('newDiv');
             deleteButton.textContent = 'Delete';
             newDiv.appendChild(deleteButton);
+
+            deleteButton.addEventListener('click', function() {
+                // Remove newDiv from the DOM
+                newDiv.remove();
+    
+                // Remove corresponding taskData from newDivArray
+                newDivArray = newDivArray.filter(item => item.id !== taskCard.id);
+    
+                // Update localStorage
+                localStorage.setItem('newDivArray', JSON.stringify(newDivArray));
+            });
+
+            const due = dayjs();
+
+            if(date.isSame(due, 'day')) {
+                newDiv.style.backgroundColor = 'yellow';
+            } else if(date.isBefore(due, 'day')) {
+                newDiv.style.backgroundColor = 'green';
+            } else if(date.isAfter(due, 'day')) {
+                newDiv.style.backgroundColor = 'red';
+            }
     
             toDoBox.appendChild(newDiv);
 
@@ -90,7 +104,7 @@ function createTaskCard(taskCard) {
             const taskData = {
                 id: taskCard.id,
                 title: title,
-                date: date,
+                date: date.format('YYYY-MM-DD'),
                 description: description,
                 status: 'todo'
             };
@@ -104,30 +118,10 @@ function createTaskCard(taskCard) {
     }
 }
 
-// Todo: create a function to render the task list and make cards draggable
-function renderTaskList() {
-
-}
-
-// Todo: create a function to handle adding a new task
-function handleAddTask(event){
-
-}
-
-// Todo: create a function to handle deleting a task
-function handleDeleteTask(event){
-
-}
-
-// Todo: create a function to handle dropping a task into a new status lane
-function handleDrop(event, ui) {
-
-}
-
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
 
-    let taskList = JSON.parse(localStorage.getItem("newDivArray"));
+    let taskList = JSON.parse(localStorage.getItem("newDivArray")) || [];
 
     $("#todo-cards, #in-progress-cards, #done-cards").droppable({
         drop: function(event, ui) {
@@ -171,8 +165,10 @@ $(document).ready(function () {
         }
     });
 
-    if(taskList) {
+    if (taskList) {
         taskList.forEach(taskData => {
+            const due = dayjs(); // Set now to taskData.date for each task
+    
             const newDiv = document.createElement('div');
             newDiv.classList.add('newDiv');
     
@@ -183,30 +179,52 @@ $(document).ready(function () {
             const line = document.createElement('hr');
             newDiv.appendChild(line);
     
+            const date = dayjs(taskData.date);
             const date2 = document.createElement('p');
-            date2.textContent = taskData.date;
+            date2.textContent = date.format('YYYY-MM-DD');
             newDiv.appendChild(date2);
     
             const description2 = document.createElement('p');
             description2.textContent = taskData.description;
             newDiv.appendChild(description2);
-
+    
             const deleteButton = document.createElement('button');
-            newDiv.classList.add('newDiv');
             deleteButton.textContent = 'Delete';
             newDiv.appendChild(deleteButton);
 
-            const status = taskData.status;
+            deleteButton.addEventListener('click', function() {
+                // Remove newDiv from the DOM
+                newDiv.remove();
     
-            if(status === 'todo') {
-                toDoBox.appendChild(newDiv);
-            } else if(status === 'inprogress') {
-                progressBox.appendChild(newDiv)
-            } else if(status === 'done') {
-                doneBox.appendChild(newDiv)
+                // Remove corresponding taskData from newDivArray
+                newDivArray = newDivArray.filter(item => item.id !== taskCard.id);
+    
+                // Update localStorage
+                localStorage.setItem('newDivArray', JSON.stringify(newDivArray));
+            });
+    
+            // Append newDiv to the correct card container based on status
+            if (taskData.status === 'todo') {
+                $('#todo-cards').append(newDiv);
+            } else if (taskData.status === 'inprogress') {
+                $('#in-progress-cards').append(newDiv);
+            } else if (taskData.status === 'done') {
+                $('#done-cards').append(newDiv);
             }
-
+    
+            // Make newDiv draggable using jQuery UI
             $(newDiv).draggable();
-        })
+    
+            // Set background color based on task's date compared to now
+            if (date.isSame(due, 'day')) {
+                newDiv.style.backgroundColor = 'yellow';
+            } else if (date.isBefore(due, 'day')) {
+                newDiv.style.backgroundColor = 'green';
+            } else if (date.isAfter(due, 'day')) {
+                newDiv.style.backgroundColor = 'red';
+            }
+        });
     }
+    
+    
 });
