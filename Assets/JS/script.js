@@ -86,19 +86,20 @@ function createTaskCard(taskCard) {
     
             toDoBox.appendChild(newDiv);
 
-            // $(newDiv).draggable();
-
             // Save the necessary data from newDiv into an object
             const taskData = {
                 id: taskCard.id,
                 title: title,
                 date: date,
-                description: description
+                description: description,
+                status: 'todo'
             };
 
             newDivArray.push(taskData);
 
             localStorage.setItem('newDivArray', JSON.stringify(newDivArray));
+
+            $(newDiv).draggable();
         }
     }
 }
@@ -128,30 +129,41 @@ $(document).ready(function () {
 
     let taskList = JSON.parse(localStorage.getItem("newDivArray"));
 
-    $("#todo-cards").droppable({
+    // $("#todo-cards, #in-progress-cards, #done-cards").droppable({
+    //     drop: function(event, ui) {
+    //       $(this).addClass("dropped");
+    //       const droppedItem = ui.draggable;
+    //       droppedItem.css('background-color', 'orange');
+    //     }
+    //   });
+
+    $("#todo-cards, #in-progress-cards, #done-cards").droppable({
         drop: function(event, ui) {
-          $(this).addClass("dropped");
-          const droppedItem = ui.draggable;
-          droppedItem.css('background-color', 'orange');
-          alert("Item dropped inside #todo-cards!");
+            $(this).addClass("dropped");
+            const droppedItem = ui.draggable;
+            droppedItem.css('background-color', 'orange');
+    
+            // Get the status based on the droppable area id
+            let status;
+            if ($(this).attr('id') === 'todo-cards') {
+                status = 'todo';
+            } else if ($(this).attr('id') === 'in-progress-cards') {
+                status = 'inprogress';
+            } else if ($(this).attr('id') === 'done-cards') {
+                status = 'done';
+            }
+    
+            // Update the status of the dropped task in taskList
+            taskList.forEach(taskData => {
+                if (taskData.title === droppedItem.find('h3').text()) {
+                    taskData.status = status;
+                }
+            });
+    
+            // Save the updated taskList to localStorage
+            localStorage.setItem("newDivArray", JSON.stringify(taskList));
         }
-      });
-      $("#in-progress-cards").droppable({
-        drop: function(event, ui) {
-          $(this).addClass("dropped");
-          const droppedItem = ui.draggable;
-          droppedItem.css('background-color', 'green');
-          alert("Item dropped inside #in-progress-cards!");
-        }
-      });
-      $("#done-cards").droppable({
-        drop: function(event, ui) {
-          $(this).addClass("dropped");
-          const droppedItem = ui.draggable;
-          droppedItem.css('background-color', 'yellow');
-          alert("Item dropped inside #done-cards!");
-        }
-      });
+    });
 
     if(taskList) {
         taskList.forEach(taskData => {
@@ -177,8 +189,16 @@ $(document).ready(function () {
             newDiv.classList.add('newDiv');
             deleteButton.textContent = 'Delete';
             newDiv.appendChild(deleteButton);
+
+            const status = taskData.status;
     
-            toDoBox.appendChild(newDiv);
+            if(status === 'todo') {
+                toDoBox.appendChild(newDiv);
+            } else if(status === 'inprogress') {
+                progressBox.appendChild(newDiv)
+            } else if(status === 'done') {
+                doneBox.appendChild(newDiv)
+            }
 
             $(newDiv).draggable();
         })
