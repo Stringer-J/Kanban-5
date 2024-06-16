@@ -193,7 +193,7 @@ $(document).ready(function () {
             newDiv.appendChild(deleteButton);
 
             deleteButton.addEventListener('click', function() {
-                // Remove newDiv from the DOM
+                // Remove newDiv
                 newDiv.remove();
     
                 // Remove corresponding taskData from newDivArray
